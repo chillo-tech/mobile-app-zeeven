@@ -7,10 +7,27 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/zeeven.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#041d3f"
     },
+    "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Autorisez ZEEVEN à accéder à votre caméra",
+          "photosPermission": "Autorisez ZEEVEN à accéder à votre appareil photo"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Autorisez ZEEVEN à accéder à votre caméra",
+          "photosPermission": "Autorisez ZEEVEN à accéder à votre appareil photo"
+
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
