@@ -13,7 +13,7 @@ import {
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { colors } from '../../utils';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
-import { Entypo } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
 
 function ScanScreen({route, navigation}) {
   console.log('====================================');
@@ -31,13 +31,22 @@ function ScanScreen({route, navigation}) {
     };
 
     getBarCodeScannerPermissions();
-  }, []);
+
+    // Should launch scan ?
+    if (route.params) {
+      const {launchScan = false} = route.params
+      setModalVisible(!launchScan)
+    }
+
+  }, [route.params]);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
     setModalVisible(!modalVisible);
     setScanned(false);
-    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    navigation.navigate({
+      name: 'scan-ticket-response',
+      params: {type, data}
+    })
   };
 
   if (hasPermission === null) {
@@ -60,61 +69,41 @@ function ScanScreen({route, navigation}) {
       setFlashMode(FlashMode.off);
     }
   }
-  return (
-    <>
-      <SafeAreaView style={styles.container}>
-        {modalVisible ? (
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Hello World!</Text>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
-                </Pressable>
-              </View>
-            </View>
-          </Modal>
-        ) : (
-          <>
-            <Camera
-              barCodeScannerSettings={{
-                barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-              }}
-              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={styles.fill}
-              flashMode={flashMode}
-            >
-            <View style={styles.actionsContainer}>
-              <View style={styles.descriptionContainer}>
-                <Text style={styles.description}>Scannez un QR Code ZEEVEN</Text>
-              </View>
-              <View style={styles.scanArea}/>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleFlash}>
-                    <Entypo name="flashlight" size={60} color={colors.white} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleCancel}>
-                    <Entypo name="circle-with-cross" size={60} color={colors.white} />
-                </TouchableOpacity>
-              </View>
-            </View>
 
-            </Camera>
-            {scanned && <Button title={'Nouveau SCAN'} onPress={() => setScanned(false)} />}
-          </>
-        )}
-      </SafeAreaView>
-    </>
+  return (
+      <>
+        <SafeAreaView style={styles.container}>
+          {modalVisible ? null : (
+              <>
+                <Camera
+                    barCodeScannerSettings={{
+                      barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                    }}
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={styles.fill}
+                    flashMode={flashMode}
+                >
+                  <View style={styles.actionsContainer}>
+                    <View style={styles.descriptionContainer}>
+                      <Text style={styles.description}>Scannez un QR Code ZEEVEN</Text>
+                    </View>
+                    <View style={styles.scanArea}/>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity style={styles.button} onPress={handleFlash}>
+                        <Entypo name="flashlight" size={60} color={colors.white} />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.button} onPress={handleCancel}>
+                        <Entypo name="circle-with-cross" size={60} color={colors.white} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                </Camera>
+                {scanned && <Button title={'Nouveau SCAN'} onPress={() => setScanned(false)} />}
+              </>
+          )}
+        </SafeAreaView>
+      </>
   );
 }
 
@@ -153,7 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 60,
-    
+
   },
   fill: {
     flex: 1

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import { colors } from '../../utils/styles';
+import { colors } from '../../utils';
 
 function Message({firstText, type = ""}) {
 	const [style, setStyle] = useState({});
