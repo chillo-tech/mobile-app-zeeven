@@ -1,6 +1,5 @@
 
 const INITIAL_STATE = {};
-const BACKOFFICE_URL = "";
 const SIGN_IN = "SIGN_IN";
 const SIGN_OUT = "SIGN_OUT";
 const SET_STEP_INDEX = "SET_STEP_INDEX";
@@ -31,7 +30,6 @@ const ICONS = {
 }
 export {
   AUTHENTICATED_USER,
-  BACKOFFICE_URL,
   ICONS,
   INITIAL_STATE,
   LABELS,

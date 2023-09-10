@@ -69,7 +69,7 @@ function EventItemStack({ route, navigation }) {
             initialParams={{ event }} 
             
           />
-          <Tab.Screen name="event-report" component={EventReports} initialParams={{ event }} />
+          {/*<Tab.Screen name="event-report" component={EventReports} initialParams={{ event }} />*/}
         </Tab.Navigator>
       ) : null}
     </>

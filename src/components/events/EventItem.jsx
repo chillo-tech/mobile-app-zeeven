@@ -1,63 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { colors, getDisplayedDate } from '../../utils';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 function EventItem({ item, displayItem }) {
+  const [loading, setLoading] = useState(false);
+  const goto = (item) => {
+    setLoading(!loading);
+    displayItem(item);
+  };
   return (
-    <TouchableHighlight
-      style={styles.item}
-      underlayColor={'transparent'}
-      onPress={() => displayItem(item)}
-    >
-      <View style={[styles.itemContainer]}>
-        <>
-          <View style={styles.descriptionContainer}>
-            <View style={styles.infos}>
-              <Text style={styles.infosName}>{item.name}</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Ionicons name="ios-people" size={24} color={colors.primary} />
-                <Text style={styles.infosName}>{item.guests.length}</Text>
-              </View>
-            </View>
-            {item?.messages[0].schedules && item?.messages[0].schedules.length ? (
-              <View style={styles.schedules}>
-                <FontAwesome5 name="calendar-alt" size={24} color={colors.warning} />
-
-                <View style={{ flexDirection: 'column', marginLeft: 15 }}>
-                  {item?.messages[0].schedules?.map((schedule, index) => (
-                    <View key={`schedule-${index}`} style={{ flexDirection: 'column', paddingVertical: 2 }}>
-                      <Text style={{ fontWeight: 'normal' }}>
-                        {getDisplayedDate(schedule.date)}
-                      </Text>
-                    </View>
-                  ))}
+    <>
+        <TouchableHighlight
+          style={styles.item}
+          underlayColor={'transparent'}
+          onPress={() => goto(item)}
+        >
+          <View style={[styles.itemContainer]}>
+            <>
+              <View style={styles.descriptionContainer}>
+                <View style={styles.infos}>
+                  <Text style={styles.infosName}>{item.name}</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Ionicons name="ios-people" size={24} color={colors.primary} />
+                    <Text style={styles.infosName}>{item.guests.length}</Text>
+                  </View>
                 </View>
-              </View>
-            ) : null}
-            {/*
-							ad?.validity?.date ?
-								(
-									<View style={styles.datesData}>
-										<Text
-											style={styles.dateItem}>
+                {/*item?.messages[0].schedules && item?.messages[0].schedules.length ? (
+                  <View style={styles.schedules}>
+                    <FontAwesome5 name="calendar-alt" size={24} color={colors.warning} />
 
-											<FontAwesome5 name="clock" color={colors.darkgray}
-														  size={14}/>
-											&nbsp;
-											{getDisplayedDate(ad?.validity?.date)}
-										</Text>
-										<Text
-											style={styles.dateItem}>
-											{getFormattedTime(new Date(ad?.validity?.start))}
-										</Text>
-									</View>
-								) : null
-						*/}
+                    <View style={{ flexDirection: 'column', marginLeft: 15 }}>
+                      {item?.messages[0].schedules?.map((schedule, index) => (
+                        <View
+                          key={`schedule-${index}`}
+                          style={{ flexDirection: 'column', paddingVertical: 2 }}
+                        >
+                          <Text style={{ fontWeight: 'normal' }}>
+                            {getDisplayedDate(schedule.date)}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                      ) : null*/}
+              </View>
+            </>
           </View>
-        </>
-      </View>
-    </TouchableHighlight>
+        </TouchableHighlight>
+    </>
   );
 }
 
