@@ -18,7 +18,7 @@ function ApplicationContextProvider({ children }) {
       dispatch({type: SET_EVENTS, data: events})
     },
 		updateEvent: async (event) => {
-			await AsyncStorage.setItem("event", JSON.stringify(event));
+			await AsyncStorage.setItem(`event-${event.publicId}`, JSON.stringify(event));
       dispatch({type: SET_EVENT, data: event})
     },
     updateSearchCriteria: (data) => {

@@ -6,30 +6,41 @@ import SearchEmpty from '../../../components/search/SearchEmpty';
 import GuestItem from '../../../components/guests/GuestItem';
 import { SecurityContext } from '../../../context/SecurityContextProvider';
 import { ApplicationContext } from '../../../context/ApplicationContextProvider';
+import * as Progress from 'react-native-progress';
 
 
 function EventGuests({ route, navigation }) {
   const url = `/backend/event`;
   const [refreshing, setRefreshing] = useState(false);
-  const [percentage, setPercentage] = useState(45);
   const { protectedAxios } = useContext(SecurityContext);
   const { updateEvent, state: {event} } = useContext(ApplicationContext);
-
+  const {scans = [], guests = []} = event;
   const handleRefresh = async() => {
     setRefreshing(true);
     try {
       const response = await protectedAxios.get(`${url}/${event.publicId}`);
       const { data } = response;
       updateEvent(data);
-      //console.log(data);
     } catch (e) {
-
+			const localEvent = await AsyncStorage.getItem(`event-${event.publicId}`);
+      updateEvent(localEvent);
       console.log(e);
     }
     navigation.navigate('event', { publicId: event.publicId });
     setRefreshing(false);
   };
 
+  const invalidateScan = async (guestId) => {
+    try {
+      await protectedAxios.delete(`${url}/${event.publicId}/scan/${guestId}`);
+      handleRefresh();
+    } catch (e) {
+			const localEvent = await AsyncStorage.getItem(`event-${event.publicId}`);
+      updateEvent(localEvent);
+      console.log(e);
+    }
+    
+  }
   return (
     <SafeAreaView>
       {event ? (
@@ -38,19 +49,23 @@ function EventGuests({ route, navigation }) {
             <View style={styles.statisticsItemContainer}>
               <Text style={styles.guests}>{`${event.guests.length} invités`}</Text>
             </View>
-            <View style={styles.progressBarContainer}>
-               <View style={[StyleSheet.absoluteFill, styles.progressBar, {width: `${percentage}%`}]} >
-                 <Text>{`${percentage} %`}</Text>
-                </View>
-            </View>
+            <Progress.Bar 
+              height={18} 
+              unfilledColor={colors.lightgray} 
+              color={colors.lightGreen} 
+              progress={(Math.round((scans.length / guests.length) * 100) / 100).toFixed(2) * 2} 
+              width={null} 
+            />
           </View>
           <FlatList
-            scrollEventThrottle={150}
-            onEndReachedThreshold={2}
-            style={{backgroundColor: colors.white}}
+            contentContainerStyle={{ paddingBottom: 200 }}
+            scrollEventThrottle={30}
+            onEndReachedThreshold={30}
+            style={{flex: 0, backgroundColor: colors.white, paddingBottom: 60}}
+            initialNumToRender={event.guests.length+ 30}
             data={event.guests}
             keyExtractor={(item, index) => `${item.id}-${index}`}
-            renderItem={({ item, index }) => <GuestItem index={index} item={item} />}
+            renderItem={({ item, index }) => <GuestItem index={index} item={item} scans={scans} invalidateScan={invalidateScan}/>}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
             ListEmptyComponent={<SearchEmpty />}
           />

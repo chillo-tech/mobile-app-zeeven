@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors, globalStyles, isValidEmail } from '../../utils';
 import { Controller, useForm } from 'react-hook-form';
-import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Message from '../../components/messages/Message';
 import { ImageBackground } from 'react-native';

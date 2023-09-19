@@ -16,9 +16,6 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { Entypo } from '@expo/vector-icons';
 
 function ScanScreen({route, navigation}) {
-  console.log('====================================');
-  console.log({route});
-  console.log('====================================');
   const [modalVisible, setModalVisible] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -113,13 +110,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: colors.white,
-    borderWidth: 3,
-    borderColor: colors.error,
+    // borderWidth: 3,
+    //borderColor: colors.error,
   },
   actionsContainer: {
     flex: 1,
-    borderWidth: 3,
-    borderColor: colors.success,
+    // borderWidth: 3,
+    // borderColor: colors.success,
     backgroundColor: 'transparent',
     justifyContent: 'space-between'
   },
