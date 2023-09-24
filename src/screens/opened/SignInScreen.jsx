@@ -1,20 +1,26 @@
 import React, { useState, useContext } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Image,
+  ImageBackground } from 'react-native';
 import { colors, globalStyles, isValidEmail } from '../../utils';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Message from '../../components/messages/Message';
-import { ImageBackground } from 'react-native';
 import { ApplicationContext } from '../../context/ApplicationContextProvider';
 import { SecurityContext } from '../../context/SecurityContextProvider';
 
 function SignInScreen({ navigation }) {
-  const image = require('./scan-qr-code.jpg');
+  const image = require('../../../assets/images/scan-qr-code.jpg');
   //const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
 
   const message = 'Un instant nous vérifions votre compte.';
   const [isActivating, setIsActivating] = useState(false);
-  const { signIn, state } = useContext(ApplicationContext);
+  const { signIn } = useContext(ApplicationContext);
   const { publicAxios } = useContext(SecurityContext);
   const {
     control,
@@ -30,7 +36,6 @@ function SignInScreen({ navigation }) {
     setIsActivating(true);
     try {
       const {
-        status,
         data: { token },
       } = await publicAxios.post('backend/signin', profile);
       signIn({ ...profile, accessToken: token });
@@ -57,6 +62,9 @@ function SignInScreen({ navigation }) {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <SafeAreaView style={[globalStyles.container, { backgroundColor: colors.blue }]}>
+        <Image resizeMode={'cover'}
+                style={styles.absoluteImage}
+               source={require('../../../assets/images/scan-qr-code.jpg')} />
         <View style={globalStyles.creationHeader}>
           <Text
             style={[globalStyles.creationTitle, { fontWeight: 900, fontSize: 60, paddingTop: 20 }]}
@@ -67,7 +75,6 @@ function SignInScreen({ navigation }) {
             Accès facile à vos évènements
           </Text>
         </View>
-
         <View style={styles.formContainer}>
           {isActivating ? (
             <Message firstText={message} />
@@ -181,6 +188,16 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'space-between',
+    width: '100%',
+    height: '100%'
   },
+  absoluteImage : {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 0
+  }
 });
 export default SignInScreen;

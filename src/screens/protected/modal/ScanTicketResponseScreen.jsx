@@ -65,6 +65,25 @@ function ScanTicketResponseScreen({ route: { params }, navigation }) {
   React.useEffect(() => {
     let isTicketValid = dataPattern.test(data);
     const [guestEventPublicId, guestInvitationPublicId, guestPublicId] = data.split('|');
+
+    if (!event.plan){
+      event.plan = {
+        plan: {
+          contacts: {}
+        }
+      }
+    }
+
+    if (!event.publicId){
+      event.publicId = eventPublicId
+    }
+
+    if (!event.invitation){
+      event.invitation = {
+        publicId: event.publicId
+      }
+    }
+
     const {
       scans = [],
       plan: { contacts = {} },
@@ -87,38 +106,42 @@ function ScanTicketResponseScreen({ route: { params }, navigation }) {
   }, []);
 
   React.useEffect(() => {
-    if (isValid) {
-      const [guestEventPublicId, guestInvitationPublicId, guestPublicId] = data.split('|');
-      const { scans = [], plan } = event;
-      const { tables = {}, contacts = {} } = plan;
-      const currentGuest = ({} = contacts[guestPublicId]);
-      const tableList = Object.values(tables);
-      const filteredTables = tableList.filter(({ contactIds }) => {
-        return contactIds.includes(guestPublicId);
-      });
+    try {
+      if (isValid) {
+        const [guestEventPublicId, guestInvitationPublicId, guestPublicId] = data.split('|');
+        const { scans = [], plan } = event;
+        const { tables = {}, contacts = {} } = plan;
+        const currentGuest = ({} = contacts[guestPublicId]);
+        const tableList = Object.values(tables);
+        const filteredTables = tableList.filter(({ contactIds }) => {
+          return contactIds.includes(guestPublicId);
+        });
 
-      if (filteredTables.length > 0) {
-        const guestTable = filteredTables[0];
-        const { name: guestTableName, publicId: tablePublicId } = guestTable;
+        if (filteredTables.length > 0) {
+          const guestTable = filteredTables[0];
+          const { name: guestTableName, publicId: tablePublicId } = guestTable;
 
-        setTicketInformations((prevState) => ({
-          ...prevState,
-          tableName: guestTableName,
-          ticketNumber: guestPublicId,
-          event: guestEventPublicId,
-          invitation: guestInvitationPublicId,
-          guest: currentGuest,
-        }));
-        const scan = {
-          eventPublicId: guestEventPublicId,
-          invitationId: guestInvitationPublicId,
-          guestPublicId,
-          tablePublicId,
-        };
-        addToScans(scan);
-      } else {
-        setIsValid(false);
+          setTicketInformations((prevState) => ({
+            ...prevState,
+            tableName: guestTableName,
+            ticketNumber: guestPublicId,
+            event: guestEventPublicId,
+            invitation: guestInvitationPublicId,
+            guest: currentGuest,
+          }));
+          const scan = {
+            eventPublicId: guestEventPublicId,
+            invitationId: guestInvitationPublicId,
+            guestPublicId,
+            tablePublicId,
+          };
+          addToScans(scan);
+        } else {
+          setIsValid(false);
+        }
       }
+    } catch (e) {
+      console.warn(e)
     }
   }, [data, isValid]);
 

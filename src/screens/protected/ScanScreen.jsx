@@ -31,8 +31,12 @@ function ScanScreen({route, navigation}) {
 
     // Should launch scan ?
     if (route.params) {
-      const {launchScan = false} = route.params
-      setModalVisible(!launchScan)
+      try {
+        const {launchScan = false} = route.params
+        setModalVisible(!launchScan)
+      } catch (e) {
+        console.warn(e)
+      }
     }
 
   }, [route.params]);

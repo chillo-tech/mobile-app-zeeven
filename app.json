@@ -38,7 +38,6 @@
       }
     },
     "android": {
-      "package": "chillo.zeeven",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -55,8 +54,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c6ccec93-e18c-4af7-92b7-3b797438fd24"
+        "projectId": "3e575da5-eb04-440f-b586-ffecac7943f6"
       }
-    }
+    },
+    "owner": "sterdevs"
   }
 }
