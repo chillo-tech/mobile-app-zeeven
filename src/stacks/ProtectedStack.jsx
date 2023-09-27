@@ -13,7 +13,6 @@ function ProtectedStack() {
       <Stack.Screen name="scan-ticket" component={ScanScreen} options={{ headerShown: false }} />
       <Stack.Screen name="scan-ticket-response" component={ScanTicketResponseScreen} options={
           {
-              presentation: 'modal',
               animation: 'slide_from_bottom',
               headerShown: false
           }} />

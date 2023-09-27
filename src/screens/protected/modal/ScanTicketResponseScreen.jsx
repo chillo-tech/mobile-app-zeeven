@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, SafeAreaView, Text, StatusBar } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Text, StatusBar, BackHandler } from 'react-native';
 import { colors } from '../../../utils';
 import PrimaryButton from '../../../components/buttons/PrimaryButton';
 import PrimaryOutlineButton from '../../../components/buttons/PrimaryOutlineButton';
@@ -103,6 +103,12 @@ function ScanTicketResponseScreen({ route: { params }, navigation }) {
     isTicketValid = isTicketValid && invitationPublicId === guestInvitationPublicId;
 
     setIsValid(() => isTicketValid);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      goTo('scan-ticket')
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   React.useEffect(() => {
