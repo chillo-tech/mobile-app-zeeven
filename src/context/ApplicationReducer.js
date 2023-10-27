@@ -1,4 +1,12 @@
-import { SET_EVENT, UPDATE_USER_INFOS, SIGN_IN, UPDATE_SEARCH_CRITERIA, SET_EVENTS, INITIAL_STATE } from '../utils/data';
+import {
+  SET_EVENT,
+  UPDATE_USER_INFOS,
+  SIGN_IN,
+  UPDATE_SEARCH_CRITERIA,
+  SET_EVENTS,
+  INITIAL_STATE,
+  SIGN_OUT
+} from '../utils/data';
 
 export const ApplicationReducer = (state, action) => {
   const { type, data } = action || {};
@@ -18,6 +26,11 @@ export const ApplicationReducer = (state, action) => {
         ...state,
         authenticatedUser: data,
       };
+    case SIGN_OUT: {
+      const signoutState = { ...state };
+      delete signoutState["authenticatedUser"];
+      return signoutState;
+    }
 
     case UPDATE_SEARCH_CRITERIA:
       return {
@@ -31,7 +44,7 @@ export const ApplicationReducer = (state, action) => {
       return {
         ...state,
       };
-    default: 
-     return INITIAL_STATE
+    default:
+      return INITIAL_STATE;
   }
 };

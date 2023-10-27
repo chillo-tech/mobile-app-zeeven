@@ -20,10 +20,15 @@ function GuestItem(props) {
       return "";
   }
 
+  const validate = () => {
+    const { item: {publicId: guestId}, manualScan } = props;
+    manualScan(guestId);
+  }
+
   return (
     <View>
       <View style={[styles.wrapper, index % 2 === 1 ? { backgroundColor: '#f0f0f5' } : '']}>
-        <View>
+        <Pressable onPress={validate}>
           <View style={styles.titleWrapper}>
             {(item.civility === 'Mme' || item.civility === 'Mlle') && (
               <SimpleLineIcons style={styles.icon} name="user-female" size={24} color="black" />
@@ -46,7 +51,7 @@ function GuestItem(props) {
               {item?.partner}
             </Text>
           ) : null}
-        </View>
+        </Pressable>
         <View>
           {
             getScannedTime().length 

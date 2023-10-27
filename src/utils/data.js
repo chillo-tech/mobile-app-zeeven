@@ -25,7 +25,7 @@ const ICONS = {
 	AdsHome: 'home',
 	AdList: 'search',
 	favorites: 'heart',
-	More: 'grid',
+	More: 'grid-view',
 	NewAd: 'plus-circle',
 }
 export {

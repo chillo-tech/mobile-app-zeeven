@@ -188,7 +188,14 @@ function ScanTicketResponseScreen({ route: { params }, navigation }) {
                       {ticketInformations.tableName}
                     </Text>
                   </View>
-                ) : null}
+                ) : (
+                  <View style={styles.ticketLine}>
+                  <Text style={styles.label}>Position</Text>
+                  <Text style={{ fontWeight: 'bold', fontSize: 36 }}>
+                    Aucune
+                  </Text>
+                </View>
+                )}
               </>
             ) : (
               <View style={{ gap: 5 }}>

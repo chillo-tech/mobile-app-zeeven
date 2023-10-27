@@ -1,4 +1,4 @@
-const LOCAL_DNS = 'http://192.168.1.128:8083';
+const LOCAL_DNS = 'http://192.168.1.13:8083';
 const RECETTE_DNS = "https://api.zeeven.chillo.fr";
 const PROD_DNS = "https://api.zeeven.fr";
 export const ADS_ENDPOINT = "ad";

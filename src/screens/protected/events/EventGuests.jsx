@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, SafeAreaView, RefreshControl, View, StyleSheet, Text } from 'react-native';
+import { FlatList, SafeAreaView, RefreshControl, View, StyleSheet, Text, TextInput } from 'react-native';
 import { colors, globalStyles } from '../../../utils';
 import Message from '../../../components/messages/Message';
 import SearchEmpty from '../../../components/search/SearchEmpty';
@@ -11,6 +11,7 @@ import * as Progress from 'react-native-progress';
 
 function EventGuests({ route, navigation }) {
   const url = `/backend/event`;
+  const [keyword, setKeyword] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const { protectedAxios } = useContext(SecurityContext);
   const { updateEvent, state: {event} } = useContext(ApplicationContext);
@@ -41,6 +42,16 @@ function EventGuests({ route, navigation }) {
     }
     
   }
+  
+  const manualScan = (idOfGuest) => {
+   const {invitation: { publicId: invitationPublicId }} = event;
+    const data = `${event.publicId}|${invitationPublicId}|${idOfGuest}`;
+    navigation.navigate({
+      name: 'scan-ticket-response',
+      params: {data}
+    })
+  }
+
   return (
     <SafeAreaView>
       {event ? (
@@ -57,15 +68,39 @@ function EventGuests({ route, navigation }) {
               width={null} 
             />
           </View>
+          <TextInput
+            value={keyword}
+            onChangeText={setKeyword}         
+            placeholder='Rechercher'             
+            style={[
+              globalStyles.fieldFont, 
+              globalStyles.creationBodyField, 
+              {
+                borderColor: colors.blue,
+                borderWidth: 1,
+                borderRadius: 6,
+                backgroundColor: colors.white, 
+                marginHorizontal: 10, marginBottom: 3
+              },
+              
+            ]}
+
+        />
           <FlatList
             contentContainerStyle={{ paddingBottom: 200 }}
             scrollEventThrottle={30}
             onEndReachedThreshold={30}
             style={{flex: 0, backgroundColor: colors.white, paddingBottom: 60}}
             initialNumToRender={event.guests.length+ 30}
-            data={event.guests}
+            data={
+              event.guests.filter(event => {
+                result  = event.lastName.toLowerCase().includes(keyword.toLowerCase()) ||  event.firstName.toLowerCase().includes(keyword.toLowerCase())
+                return result;
+              }
+              )
+            }
             keyExtractor={(item, index) => `${item.id}-${index}`}
-            renderItem={({ item, index }) => <GuestItem index={index} item={item} scans={scans} invalidateScan={invalidateScan}/>}
+            renderItem={({ item, index }) => <GuestItem manualScan={manualScan} index={index} item={item} scans={scans} invalidateScan={invalidateScan}/>}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
             ListEmptyComponent={<SearchEmpty />}
           />
@@ -110,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   statistics: {
-    paddingVertical: 25,
+    paddingVertical: 8,
     paddingHorizontal: 10
   },
   statisticsItemContainer: {

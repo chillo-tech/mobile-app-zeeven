@@ -6,6 +6,7 @@ import EventReports from './EventReports';
 import EventScan from './EventScan';
 import { colors } from '../../../utils';
 import { ApplicationContext } from '../../../context/ApplicationContextProvider';
+import MoreScreen from '../MoreScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,15 +41,12 @@ function EventItemStack({ route, navigation }) {
             },
             title: event.name,
             headerTintColor: colors.white,
-
-
             headerTitleStyle: {
               fontWeight: 'bold',
               textTransform: 'uppercase'
             },
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
-
               if (route.name === 'Home') {
                 iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
               } else if (route.name === 'Settings') {
@@ -69,6 +67,7 @@ function EventItemStack({ route, navigation }) {
             initialParams={{ event }} 
             
           />
+          <Tab.Screen name="More" component={MoreScreen} options={{headerShown: false}}/>
           {/*<Tab.Screen name="event-report" component={EventReports} initialParams={{ event }} />*/}
         </Tab.Navigator>
       ) : null}

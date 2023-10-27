@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { ApplicationContext } from '../../../context/ApplicationContextProvider';
 import { SecurityContext } from '../../../context/SecurityContextProvider';
 
@@ -11,19 +11,21 @@ import Message from '../../../components/messages/Message';
 
 function EventListScreen({ navigation }) {
   const url = `/backend/event`;
-  const { state, updateEvents, updateEvent } = useContext(ApplicationContext);
+  const { state, updateEvents, updateEvent, signOut } = useContext(ApplicationContext);
   const { protectedAxios } = useContext(SecurityContext);
   let isActive = true;
   const { events } = state;
   const [isLoading, setIsloading] = useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = async() => {
+  const logout = () => {
+    signOut();
+  };
+  const onRefresh = async () => {
     search();
     setRefreshing(false);
   };
 
-  const displayItem = async(event) => {
+  const displayItem = async (event) => {
     try {
       const response = await protectedAxios.get(`${url}/${event.publicId}`);
       const { data } = response;
@@ -66,8 +68,8 @@ function EventListScreen({ navigation }) {
           </View>
         </SafeAreaView>
       ) : (
-        <SafeAreaView style={[globalStyles.container, { backgroundColor: colors.blue }]}>
-          <View style={[globalStyles.creationHeader, {marginTop: 20}]}>
+        <Pressable style={[globalStyles.container, { backgroundColor: colors.blue }]}>
+          <View style={[globalStyles.creationHeader, { marginTop: 20 }]}>
             <Text
               style={[
                 globalStyles.creationTitle,
@@ -76,9 +78,7 @@ function EventListScreen({ navigation }) {
             >
               ZEEVEN
             </Text>
-            <Text style={[globalStyles.creationTitle, { fontSize: 20 }]}>
-              vos évènements
-            </Text>
+            <Text style={[globalStyles.creationTitle, { fontSize: 20 }]}>vos évènements</Text>
           </View>
           <FlatList
             contentContainerStyle={styles.searchResultsContainer}
@@ -90,7 +90,18 @@ function EventListScreen({ navigation }) {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             ListEmptyComponent={<SearchEmpty />}
           />
-        </SafeAreaView>
+          
+          <Pressable onPress={logout}
+            style={({pressed}) => [
+              {
+                backgroundColor: pressed ? colors.success: colors.blue,
+                color: pressed ? colors.blue: colors.white
+              },
+              styles.logout,
+            ]}>
+            <Text style={styles.logoutText}>Déconnexion</Text>
+          </Pressable>
+        </Pressable>
       )}
     </>
   );
@@ -102,6 +113,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flex: 1,
     justifyContent: 'center',
+  },
+  logout: {
+    borderRadius: 8,
+    padding: 6,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: colors.white,
+  },
+  logoutText: {
+    fontWeight: '600',
+    fontSize: 18,
+    color: colors.white
   },
 });
 export default EventListScreen;
