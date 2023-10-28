@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { FlatList, SafeAreaView, RefreshControl, View, StyleSheet, Text, TextInput } from 'react-native';
-import { colors, globalStyles } from '../../../utils';
+import { colors, globalStyles, slugify } from '../../../utils';
 import Message from '../../../components/messages/Message';
 import SearchEmpty from '../../../components/search/SearchEmpty';
 import GuestItem from '../../../components/guests/GuestItem';
@@ -16,6 +16,18 @@ function EventGuests({ route, navigation }) {
   const { protectedAxios } = useContext(SecurityContext);
   const { updateEvent, state: {event} } = useContext(ApplicationContext);
   const {scans = [], guests = []} = event;
+
+  const guestsFiltered = guests.filter(oneGuest => {
+    result  = oneGuest.lastName.toLowerCase().includes(keyword.toLowerCase()) ||  oneGuest.firstName.toLowerCase().includes(keyword.toLowerCase())
+    return result;
+  });
+  const guestsSorted = guestsFiltered.sort((a, b) => {
+    const aSlug = slugify(`${a.lastName.toLowerCase()}${a.firstName.toLowerCase()}`);
+    const bSlug = slugify(`${b.lastName.toLowerCase()}${b.firstName.toLowerCase()}`);
+    return aSlug.localeCompare(bSlug);
+  });
+
+
   const handleRefresh = async() => {
     setRefreshing(true);
     try {
@@ -92,13 +104,7 @@ function EventGuests({ route, navigation }) {
             onEndReachedThreshold={30}
             style={{flex: 0, backgroundColor: colors.white, paddingBottom: 60}}
             initialNumToRender={event.guests.length+ 30}
-            data={
-              event.guests.filter(event => {
-                result  = event.lastName.toLowerCase().includes(keyword.toLowerCase()) ||  event.firstName.toLowerCase().includes(keyword.toLowerCase())
-                return result;
-              }
-              )
-            }
+            data={guestsSorted}
             keyExtractor={(item, index) => `${item.id}-${index}`}
             renderItem={({ item, index }) => <GuestItem manualScan={manualScan} index={index} item={item} scans={scans} invalidateScan={invalidateScan}/>}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}

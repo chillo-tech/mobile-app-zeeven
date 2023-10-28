@@ -30,20 +30,23 @@ function GuestItem(props) {
       <View style={[styles.wrapper, index % 2 === 1 ? { backgroundColor: '#f0f0f5' } : '']}>
         <Pressable onPress={validate}>
           <View style={styles.titleWrapper}>
-            {(item.civility === 'Mme' || item.civility === 'Mlle') && (
+            {(item.civility === 'Mme' || item.civility === 'Mlle' || item.civility === 'MLLE') && (
               <SimpleLineIcons style={styles.icon} name="user-female" size={24} color="black" />
             )}
             {item.civility === 'MLLE' && (
               <SimpleLineIcons style={styles.icon} name="user-female" size={24} color="black" />
             )}
-            {(item.civility === 'MR' || item.civility === 'Mr') && (
+            {(item.civility === 'MR' || item.civility === 'Mr' || item.civility === 'M') && (
               <SimpleLineIcons style={styles.icon} name="user" size={24} color="black" />
             )}
             {item.civility === 'MR_MRS' && (
               <Feather style={styles.icon} name="users" size={24} color="black" />
             )}
+            <Text style={[styles.title, {marginRight: 3, textTransform: 'uppercase'}]}>
+             {item.lastName}
+            </Text>
             <Text style={styles.title}>
-              {item.firstName} {item.lastName}
+             {item.firstName}
             </Text>
           </View>
           {item?.partner ? (
