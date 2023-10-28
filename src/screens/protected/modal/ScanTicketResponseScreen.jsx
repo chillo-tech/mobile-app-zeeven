@@ -12,7 +12,7 @@ const url = `/backend/event`;
 const Divider = () => <View style={styles.divider} />;
 
 function ScanTicketResponseScreen({ route: { params }, navigation }) {
-  const { type, data } = params;
+  const { data } = params;
   const [isValid, setIsValid] = React.useState(dataPattern.test(data));
 
   const [ticketInformations, setTicketInformations] = React.useState({});
@@ -174,7 +174,7 @@ function ScanTicketResponseScreen({ route: { params }, navigation }) {
                 </View>
                 <View style={styles.titleWrapper}>
                   <Text style={styles.label}>Prénom Nom</Text>
-                  <Text style={{ fontWeight: 'bold', fontSize: 26 }}>
+                  <Text style={{ fontWeight: 'bold', fontSize: 24 }}>
                     {ticketInformations?.guest?.firstName} {ticketInformations?.guest?.lastName}
                   </Text>
                   {ticketInformations?.guest?.partner ? (
@@ -251,17 +251,18 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: colors.white,
-    height: 450,
+    flex: 1,
+    marginVertical: 60,
     width: 300,
     borderRadius: 5,
     elevation: 5,
   },
   cardContent: {
+    flex: 1,
     padding: 15,
     gap: 10,
   },
   cardBottom: {
-    flex: 1,
     gap: 10,
     justifyContent: 'flex-end',
     alignItems: 'center',

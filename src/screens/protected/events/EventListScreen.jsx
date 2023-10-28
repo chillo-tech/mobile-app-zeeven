@@ -90,7 +90,7 @@ function EventListScreen({ navigation }) {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             ListEmptyComponent={<SearchEmpty />}
           />
-          
+
           <Pressable onPress={logout}
             style={({pressed}) => [
               {
