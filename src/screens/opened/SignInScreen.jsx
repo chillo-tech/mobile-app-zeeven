@@ -5,7 +5,6 @@ import { Alert,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
   ImageBackground } from 'react-native';
 import { colors, globalStyles, isValidEmail } from '../../utils';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,9 +61,6 @@ function SignInScreen({ navigation }) {
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <SafeAreaView style={[globalStyles.container, { backgroundColor: colors.blue }]}>
-        <Image resizeMode={'cover'}
-                style={styles.absoluteImage}
-               source={require('../../../assets/images/scan-qr-code.jpg')} />
         <View style={globalStyles.creationHeader}>
           <Text
             style={[globalStyles.creationTitle, { fontWeight: 900, fontSize: 60, paddingTop: 20 }]}

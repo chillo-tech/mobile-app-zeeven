@@ -6,13 +6,10 @@ import {
   Button,
   SafeAreaView,
   TouchableOpacity,
-  StatusBar,
-  Modal,
-  Pressable,
 } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { colors } from '../../utils';
-import { Camera, CameraType, FlashMode } from 'expo-camera';
+import { Camera, FlashMode } from 'expo-camera';
 import { Entypo } from '@expo/vector-icons';
 
 function ScanScreen({route, navigation}) {
@@ -27,7 +24,7 @@ function ScanScreen({route, navigation}) {
       setHasPermission(status === 'granted');
     };
 
-    getBarCodeScannerPermissions();
+    getBarCodeScannerPermissions().then(() => console.log('granted'));
 
     // Should launch scan ?
     if (route.params) {
@@ -139,11 +136,9 @@ const styles = StyleSheet.create({
     fontWeight: '900'
   },
   descriptionContainer: {
-    color: colors.white,
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 60,
-
   },
   fill: {
     flex: 1
