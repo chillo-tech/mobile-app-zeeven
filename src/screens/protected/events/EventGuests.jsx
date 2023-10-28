@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {FlatList, RefreshControl, SafeAreaView, Text, TextInput, View} from 'react-native';
+import {FlatList, RefreshControl, SafeAreaView, Text, StyleSheet, TextInput, View} from 'react-native';
 import {colors, globalStyles, slugify} from '../../../utils';
 import Message from '../../../components/messages/Message';
 import SearchEmpty from '../../../components/search/SearchEmpty';

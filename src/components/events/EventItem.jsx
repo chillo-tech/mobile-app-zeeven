@@ -6,9 +6,10 @@ import {ActivityIndicator} from "react-native-paper";
 
 function EventItem({item, displayItem}) {
     const [loading, setLoading] = useState(false);
-    const goto = (item) => {
+    const goto = async (item) => {
         setLoading(true);
-        displayItem(item);
+        await displayItem(item);
+        setLoading(false);
     };
 
     useEffect(() => {
