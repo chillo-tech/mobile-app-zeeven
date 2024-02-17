@@ -22,7 +22,7 @@ function EventItem({ item, displayItem }) {
                 <View style={styles.infos}>
                   <Text style={styles.infosName}>{item.name}</Text>
                   <View style={{ flexDirection: 'row' }}>
-                    <Ionicons name="ios-people" size={24} color={colors.primary} />
+                    <Ionicons name="people" size={24} color={colors.primary} />
                     <Text style={styles.infosName}>{item.guests.length}</Text>
                   </View>
                 </View>

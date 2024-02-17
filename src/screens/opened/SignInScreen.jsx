@@ -1,24 +1,25 @@
-import React, { useState, useContext } from 'react';
-import { Alert,
+import React, { useState, useContext } from "react";
+import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   Image,
-  ImageBackground } from 'react-native';
-import { colors, globalStyles, isValidEmail } from '../../utils';
-import { Controller, useForm } from 'react-hook-form';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Message from '../../components/messages/Message';
-import { ApplicationContext } from '../../context/ApplicationContextProvider';
-import { SecurityContext } from '../../context/SecurityContextProvider';
+  ImageBackground,
+} from "react-native";
+import { colors, globalStyles, isValidEmail } from "../../utils";
+import { Controller, useForm } from "react-hook-form";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Message from "../../components/messages/Message";
+import { ApplicationContext } from "../../context/ApplicationContextProvider";
+import { SecurityContext } from "../../context/SecurityContextProvider";
 
 function SignInScreen({ navigation }) {
-  const image = require('../../../assets/images/scan-qr-code.jpg');
-  //const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
+  const image = require("../../../assets/images/scan-qr-code.jpg");
 
-  const message = 'Un instant nous vérifions votre compte.';
+  const message = "Un instant nous vérifions votre compte.";
   const [isActivating, setIsActivating] = useState(false);
   const { signIn } = useContext(ApplicationContext);
   const { publicAxios } = useContext(SecurityContext);
@@ -28,32 +29,33 @@ function SignInScreen({ navigation }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
   });
   const onSubmit = async (profile) => {
     setIsActivating(true);
     try {
-      const {
+      let {
         data: { token },
-      } = await publicAxios.post('backend/signin', profile);
+      } = await publicAxios.post("/backend/signin", profile);
+
       signIn({ ...profile, accessToken: token });
       setIsActivating(false);
     } catch (error) {
       let message = error?.response?.data?.message;
       if (error?.response?.status === 401) {
-        message = 'Identifiant ou mot de passe invalide';
+        message = "Identifiant ou mot de passe invalide";
       }
-      Alert.alert('Une erreur est survenue', message, [{ text: 'OK' }]);
+      Alert.alert("Une erreur est survenue", message, [{ text: "OK" }]);
       setIsActivating(false);
     }
   };
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: '',
-      title: '',
+      headerTitle: "",
+      title: "",
       headerBackTitleVisible: false,
       headerTransparent: true,
       headerShadowVisible: false,
@@ -61,13 +63,20 @@ function SignInScreen({ navigation }) {
   }, [navigation]);
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <SafeAreaView style={[globalStyles.container, { backgroundColor: colors.blue }]}>
-        <Image resizeMode={'cover'}
-                style={styles.absoluteImage}
-               source={require('../../../assets/images/scan-qr-code.jpg')} />
+      <SafeAreaView
+        style={[globalStyles.container, { backgroundColor: colors.blue }]}
+      >
+        <Image
+          resizeMode={"cover"}
+          style={styles.absoluteImage}
+          source={require("../../../assets/images/scan-qr-code.jpg")}
+        />
         <View style={globalStyles.creationHeader}>
           <Text
-            style={[globalStyles.creationTitle, { fontWeight: 900, fontSize: 60, paddingTop: 20 }]}
+            style={[
+              globalStyles.creationTitle,
+              { fontWeight: 900, fontSize: 60, paddingTop: 20 },
+            ]}
           >
             ZEEVEN
           </Text>
@@ -83,7 +92,9 @@ function SignInScreen({ navigation }) {
               <View
                 style={[
                   globalStyles.creationBodyFieldGroup,
-                  errors?.email ? globalStyles.inputGroupError : globalStyles.inputGroupDefault,
+                  errors?.email
+                    ? globalStyles.inputGroupError
+                    : globalStyles.inputGroupDefault,
                 ]}
               >
                 <Controller
@@ -94,7 +105,10 @@ function SignInScreen({ navigation }) {
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                      style={[globalStyles.fieldFont, globalStyles.creationBodyField]}
+                      style={[
+                        globalStyles.fieldFont,
+                        globalStyles.creationBodyField,
+                      ]}
                       placeholder="Adresse email"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -104,12 +118,16 @@ function SignInScreen({ navigation }) {
                   name="username"
                 />
               </View>
-              {errors.username && <Text style={globalStyles.error}>L'email est invalide</Text>}
+              {errors.username && (
+                <Text style={globalStyles.error}>L'email est invalide</Text>
+              )}
 
               <View
                 style={[
                   globalStyles.creationBodyFieldGroup,
-                  errors?.password ? globalStyles.inputGroupError : globalStyles.inputGroupDefault,
+                  errors?.password
+                    ? globalStyles.inputGroupError
+                    : globalStyles.inputGroupDefault,
                 ]}
               >
                 <Controller
@@ -119,7 +137,10 @@ function SignInScreen({ navigation }) {
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                      style={[globalStyles.fieldFont, globalStyles.creationBodyField]}
+                      style={[
+                        globalStyles.fieldFont,
+                        globalStyles.creationBodyField,
+                      ]}
                       placeholder="Mot de passe"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -131,10 +152,12 @@ function SignInScreen({ navigation }) {
                 />
               </View>
               {errors?.password && (
-                <Text style={globalStyles.error}>Le mot de passe est invalide</Text>
+                <Text style={globalStyles.error}>
+                  Le mot de passe est invalide
+                </Text>
               )}
               <TouchableOpacity
-                style={[styles.button]}
+                style={styles.button}
                 onPress={handleSubmit(onSubmit)}
                 activeOpacity={1}
               >
@@ -151,20 +174,20 @@ function SignInScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   account: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 10,
   },
   accountButton: {
     color: colors.primary,
     fontSize: 16,
-    fontWeight: 'normal',
+    fontWeight: "normal",
     marginLeft: 5,
   },
   accountText: {
     fontSize: 16,
-    fontWeight: 'normal',
+    fontWeight: "normal",
     color: colors.darkgray,
   },
   button: {
@@ -173,7 +196,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     color: colors.white,
-    textAlign: 'center',
+    textAlign: "center",
     padding: 10,
     fontSize: 22,
   },
@@ -187,17 +210,17 @@ const styles = StyleSheet.create({
 
   image: {
     flex: 1,
-    justifyContent: 'space-between',
-    width: '100%',
-    height: '100%'
+    justifyContent: "space-between",
+    width: "100%",
+    height: "100%",
   },
-  absoluteImage : {
+  absoluteImage: {
     position: "absolute",
     left: 0,
     top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 0
-  }
+    width: "100%",
+    height: "100%",
+    zIndex: 0,
+  },
 });
 export default SignInScreen;
